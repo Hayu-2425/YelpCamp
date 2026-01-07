@@ -29,6 +29,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
+
 const validateCampground = (req, res, next) => {
     const { error } = campgroundSchema.validate(req.body);
     if (error) {
@@ -48,8 +49,6 @@ const validateReview = (req, res, next) => {
         next();
     }
 }
-
-
 
 app.get('/', (req, res) => {
     res.render('home')
@@ -72,6 +71,7 @@ app.post('/campgrounds', validateCampground,catchAsync(async (req, res) => {
     res.redirect(`/campgrounds/${campground._id}`)
 }));
 
+
 app.get('/campgrounds/:id', catchAsync(async (req, res,) => {
     const campground = await Campground.findById(req.params.id).populate('reviews');
     res.render('campgrounds/show', { campground });
@@ -81,6 +81,7 @@ app.get('/campgrounds/:id/edit', catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id)
     res.render('campgrounds/edit', { campground });
 }));
+
 
 app.put('/campgrounds/:id', validateCampground, catchAsync(async (req, res) => {
     const { id } = req.params;
@@ -110,8 +111,6 @@ app.delete('/campgrounds/:id/reviews/:reviewId', catchAsync(async (req, res) => 
     await Review.findByIdAndDelete(reviewId);
     res.redirect(`/campgrounds/${id}`);
 }))
-
-
 
 //if u try 2 request some url u dont recognize the easy way to do this is 
 
